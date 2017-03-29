@@ -4,7 +4,7 @@ export const toggleColor = () => ({
     type: types.TOGGLE_THEME,
 });
 
-export const changeGridSpacing = (gridSpacing) => ({
+export const changeGridSpacing = (gridSpacingDiff) => ({
     type: types.CHANGE_GRID_SPACING,
-    gridSpacing,
+    gridSpacingDiff,
 });

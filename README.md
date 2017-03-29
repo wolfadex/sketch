@@ -5,7 +5,7 @@ Features
   * [ ] Drawing
     * [ ] Shapes
       * [x] Boxes
-      * [ ] Circles
+      * [x] Circles
       * [ ] Lines
       * [ ] Text
       * [ ] Icons (A list of predefined shapes)
@@ -13,7 +13,7 @@ Features
     * [ ] Resize
     * [ ] Delete
   * [ ] Menu
-    * [ ] Set current shape type
+    * [x] Set current shape type
     * [x] Change theme (light/dark)
   * [ ] Zoom
   * [ ] Scroll/Pan

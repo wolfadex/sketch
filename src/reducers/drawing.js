@@ -10,7 +10,25 @@ const initialState = {
     currentType: 'rect',
     shapes: {},
 };
-
+const defaultShapeProps = {
+    rect: (x, y) => ({
+        x,
+        y,
+        width: 20,
+        height: 20,
+    }),
+    circle: (cx, cy) => ({
+        cx,
+        cy,
+        r: 10,
+    }),
+    line: (x1, y1) => ({
+        x1,
+        y1,
+        x2: x1,
+        y2: 20,
+    })
+};
 const shapePropsFromType = (type, shapeProps = {}) => {
     switch (type) {
         case 'rect':
@@ -65,7 +83,7 @@ export default function contextMenuReducer(
                 shapes: Object.assign({}, state.shapes, {
                     [newShape]: Object.assign(
                         {},
-                        shapePropsFromType(state.currentType, shapeProps),
+                        shapePropsFromType(state.currentType, defaultShapeProps[state.currentType](x, y)),
                         {
                             type: state.currentType,
                         },

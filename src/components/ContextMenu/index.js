@@ -32,7 +32,11 @@ const menuSlice = ({
                 transform: `translate(${iconX(start, end)}px, ${iconY(start, end)}px)`
             }}
         >
-            {child}
+            {React.cloneElement(child, {
+                style: {
+                    pointerEvents: 'none',
+                },
+            })}
         </g>
     </g>
 );

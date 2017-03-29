@@ -10,7 +10,7 @@ const initialState = {
 export default function colorsReducer(
     state = initialState,
     {
-        gridSpacing,
+        gridSpacingDiff,
         type,
     },
 ) {
@@ -21,7 +21,7 @@ export default function colorsReducer(
             });
         case types.CHANGE_GRID_SPACING:
             return Object.assign({}, state, {
-                gridSpacing: Math.max(Math.min(gridSpacing, maxGridSpacing), minGridSpacing),
+                gridSpacing: Math.max(Math.min(state.gridSpacing + gridSpacingDiff, maxGridSpacing), minGridSpacing),
             });
         default:
             return state;

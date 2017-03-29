@@ -6,6 +6,7 @@ import * as contextMenuActions from 'actions/contextMenu';
 import * as drawingActions from 'actions/drawing';
 import * as themeActions from 'actions/theme';
 import ContextMenu from 'components/ContextMenu';
+import Background from 'containers/Background';
 
 @connect(({
     contextMenu: {
@@ -20,13 +21,11 @@ import ContextMenu from 'components/ContextMenu';
     } = {},
     theme: {
         colors,
-        gridSpacing,
     } = {},
 }) => ({
     colors,
     currentShape,
     drawingMode,
-    gridSpacing,
     initialX,
     initialY,
     shapes,
@@ -70,7 +69,6 @@ class App extends Component {
             colors,
             currentShape,
             dispatch,
-            gridSpacing,
             shapes,
             showContextMenu,
         } = this.props;
@@ -78,33 +76,6 @@ class App extends Component {
             width,
             height,
         } = this.state;
-        let gridVertical = [];
-        let gridHorizontal = [];
-
-        for (let i = 1; i * gridSpacing < width; i++) {
-            gridVertical.push(
-                <line
-                    key={`grid-line__vertial__${i}`}
-                    x1={`${i * gridSpacing}px`}
-                    y1='0px'
-                    x2={`${i * gridSpacing}px`}
-                    y2={`${height}px`}
-                    stroke={styles[colors].grid}
-                />
-            );
-        }
-        for (let i = 1; i * gridSpacing < height; i++) {
-            gridHorizontal.push(
-                <line
-                    key={`grid-line__horizontal__${i}`}
-                    x1='0px'
-                    y1={`${i * gridSpacing}px`}
-                    x2={`${width}px`}
-                    y2={`${i * gridSpacing}px`}
-                    stroke={styles[colors].grid}
-                />
-            );
-        }
 
         return (
             <svg
@@ -128,21 +99,10 @@ class App extends Component {
                         <feBlend in='SourceGraphic' in2='blurOut' mode='normal' />
                     </filter>
                 </defs>
-                <g
-                    id='background'
-                >
-                    {/* Background */}
-                    <rect
-                        x='0'
-                        y='0'
-                        width={width}
-                        height={height}
-                        fill={styles[colors].background}
-                    />
-                    {/* Grid */}
-                    {gridVertical}
-                    {gridHorizontal}
-                </g>
+                <Background
+                    width={width}
+                    height={height}
+                />
                 {/* Shapes */}
                 <g>
                     {Object.keys(shapes).map((key) => {
@@ -202,13 +162,26 @@ class App extends Component {
         y,
     }) {
         const {
+            currentShape,
             dispatch,
             showContextMenu,
         } = this.props;
 
         if (button === 0 && !showContextMenu) {
             if (parentElement.id === 'background') {
-                dispatch(drawingActions.startShape({x, y, width: 20, height: 20}, x, y));
+                // let shapeProps = {};
+                //
+                // switch (currentShape) {
+                //     case 'rect':
+                //         shapeProps = {
+                //             x,
+                //             y,
+                //             width: 20,
+                //             height: 20
+                //         };
+                // }
+
+                dispatch(drawingActions.startShape({}, x, y));
             }
             else if (classList.value.indexOf('shape') > -1) {
                 dispatch(drawingActions.selectShape(id));
@@ -271,7 +244,6 @@ class App extends Component {
 
         switch (type) {
             case 'rect':
-
                 return Object.assign(
                     {},
                     shapeProps,
@@ -286,6 +258,20 @@ class App extends Component {
                         y: initialY + diffY,
                     }),
                 );
+            case 'circle':
+                return Object.assign(
+                    {},
+                    shapeProps,
+                    {
+                        r: Math.sqrt(Math.abs(diffX) ** 2 + Math.abs(diffY) ** 2),
+                    },
+                    // (diffX < 0 && {
+                    //     x: initialX + diffX,
+                    // }),
+                    // (diffY < 0 && {
+                    //     y: initialY + diffY,
+                    // }),
+                );
         }
     }
 
@@ -294,15 +280,14 @@ class App extends Component {
     }) {
         const {
             dispatch,
-            gridSpacing,
         } = this.props;
 
         switch (keyCode) {
             case 219:
-                dispatch(themeActions.changeGridSpacing(gridSpacing - 5));
+                dispatch(themeActions.changeGridSpacing(-5));
                 break;
             case 221:
-                dispatch(themeActions.changeGridSpacing(gridSpacing + 5));
+                dispatch(themeActions.changeGridSpacing(5));
                 break;
             default:
                 console.log(keyCode);
