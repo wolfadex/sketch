@@ -1,0 +1,21 @@
+.pieMenuSlice {
+    cursor: pointer;
+    fill: rgba(0, 0, 0, 0);
+
+    &:hover {
+        fill: red;
+    }
+}
+
+.spring-forth {
+    animation: spring-forth 0.1s forward;
+}
+
+@keyframes spring-forth {
+    0% {
+        transform: scale(0, 0);
+    }
+    100% {
+        transform: scale(1, 1);
+    }
+}
