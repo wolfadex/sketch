@@ -5,9 +5,8 @@ export const setShapeType = (newType) => ({
     newType,
 });
 
-export const startShape = (shapeProps, x, y) => ({
+export const startShape = (x, y) => ({
     type: types.START_SHAPE,
-    shapeProps,
     x,
     y,
 });

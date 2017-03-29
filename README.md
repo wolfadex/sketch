@@ -6,15 +6,17 @@ Features
     * [ ] Shapes
       * [x] Boxes
       * [x] Circles
-      * [ ] Lines
+      * [x] Lines
       * [ ] Text
       * [ ] Icons (A list of predefined shapes)
     * [ ] Select
     * [ ] Resize
     * [ ] Delete
+    * [ ] Group shapes
   * [ ] Menu
     * [x] Set current shape type
     * [x] Change theme (light/dark)
+    * [ ] Clear view of all shapes
   * [ ] Zoom
   * [ ] Scroll/Pan
   * [ ] Export

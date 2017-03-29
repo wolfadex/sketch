@@ -26,7 +26,7 @@ const defaultShapeProps = {
         x1,
         y1,
         x2: x1,
-        y2: 20,
+        y2: y1 + 20,
     })
 };
 const shapePropsFromType = (type, shapeProps = {}) => {
@@ -56,6 +56,20 @@ const shapePropsFromType = (type, shapeProps = {}) => {
                 cx,
                 cy,
                 r,
+            };
+        case 'line':
+            const {
+                x1,
+                y1,
+                x2,
+                y2,
+            } = shapeProps;
+
+            return {
+                x1,
+                y1,
+                x2,
+                y2,
             };
     }
 };

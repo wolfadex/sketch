@@ -169,19 +169,7 @@ class App extends Component {
 
         if (button === 0 && !showContextMenu) {
             if (parentElement.id === 'background') {
-                // let shapeProps = {};
-                //
-                // switch (currentShape) {
-                //     case 'rect':
-                //         shapeProps = {
-                //             x,
-                //             y,
-                //             width: 20,
-                //             height: 20
-                //         };
-                // }
-
-                dispatch(drawingActions.startShape({}, x, y));
+                dispatch(drawingActions.startShape(x, y));
             }
             else if (classList.value.indexOf('shape') > -1) {
                 dispatch(drawingActions.selectShape(id));
@@ -265,12 +253,15 @@ class App extends Component {
                     {
                         r: Math.sqrt(Math.abs(diffX) ** 2 + Math.abs(diffY) ** 2),
                     },
-                    // (diffX < 0 && {
-                    //     x: initialX + diffX,
-                    // }),
-                    // (diffY < 0 && {
-                    //     y: initialY + diffY,
-                    // }),
+                );
+            case 'line':
+                return Object.assign(
+                    {},
+                    shapeProps,
+                    {
+                        x2: x,
+                        y2: y,
+                    },
                 );
         }
     }
