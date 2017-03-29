@@ -9,9 +9,9 @@ Features
       * [x] Lines
       * [ ] Text
       * [ ] Icons (A list of predefined shapes)
-    * [ ] Select
+    * [x] Select
     * [ ] Resize
-    * [ ] Delete
+    * [x] Delete
     * [ ] Group shapes
   * [ ] Menu
     * [x] Set current shape type

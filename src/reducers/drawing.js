@@ -131,7 +131,7 @@ export default function contextMenuReducer(
             });
         case types.DELETE_SHAPE:
             const {
-                [shapeId]: deletedShape,
+                [state.currentShape]: deletedShape,
                 ...notDeletedShapes
             } = state.shapes;
             return Object.assign({}, state, {

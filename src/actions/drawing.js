@@ -31,7 +31,6 @@ export const selectShape = (shapeId, x, y) => ({
     y,
 });
 
-export const deleteShape = (shapeId) => ({
+export const deleteShape = () => ({
     type: types.DELETE_SHAPE,
-    shapeId,
 });

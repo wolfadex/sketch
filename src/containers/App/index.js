@@ -112,7 +112,7 @@ class App extends Component {
                         } = shapes[key];
 
                         return type == null ? null : createElement(type, Object.assign({}, shapeProps, {
-                            className: 'shape',
+                            className: `shape ${key === currentShape ? 'shape--active' : ''}`,
                             fill: 'none',
                             id: key,
                             key,
@@ -274,11 +274,15 @@ class App extends Component {
         } = this.props;
 
         switch (keyCode) {
-            case 219:
+            case 219: // [
                 dispatch(themeActions.changeGridSpacing(-5));
                 break;
-            case 221:
+            case 221: // ]
                 dispatch(themeActions.changeGridSpacing(5));
+                break;
+            case 46: // DELETE
+            case 88: // x
+                dispatch(drawingActions.deleteShape());
                 break;
             default:
                 console.log(keyCode);
