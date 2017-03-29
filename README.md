@@ -10,13 +10,13 @@ Features
       * [ ] Text
       * [ ] Icons (A list of predefined shapes)
     * [ ] Select
-    * [ ] Rsize
+    * [ ] Resize
     * [ ] Delete
   * [ ] Menu
     * [ ] Set current shape type
     * [x] Change theme (light/dark)
   * [ ] Zoom
-  * [ ] "Scroll" (virtual scrolling)
+  * [ ] Scroll/Pan
   * [ ] Export
     * [ ] JSON
   * [ ] Import
