@@ -18,6 +18,7 @@ const menuSlice = ({
     end,
     key,
     start,
+    title,
     ...pathProps
 }) => (
     <g
@@ -39,6 +40,12 @@ const menuSlice = ({
                 },
             })}
         </g>
+        {
+            title &&
+            <title>
+                {title}
+            </title>
+        }
     </g>
 );
 
@@ -81,6 +88,7 @@ class ContextMenu extends PureComponent {
         const menuOptions = [
             {
                 onClick: () => this.handleSetShape('rect'),
+                title: 'Rectangle',
                 child:
                     <rect
                         x='0'
@@ -94,6 +102,7 @@ class ContextMenu extends PureComponent {
             },
             {
                 onClick: () => this.handleSetShape('circle'),
+                title: 'Circle',
                 child:
                     <circle
                         cx='0'
@@ -106,6 +115,7 @@ class ContextMenu extends PureComponent {
             },
             {
                 onClick: () => this.handleSetShape('line'),
+                title: 'Line',
                 child:
                     <line
                         x1='0'
@@ -118,6 +128,7 @@ class ContextMenu extends PureComponent {
             },
             {
                 onClick: () => this.handleSetShape('text'),
+                title: 'Text',
                 child:
                     <text
                         x='-10'
@@ -130,6 +141,7 @@ class ContextMenu extends PureComponent {
             },
             // {
             //     onClick: () => his.handleSetShape('path'),
+            //      title: 'Icon',
             //     // child:
             //     //     'icon',
             // },
@@ -140,10 +152,11 @@ class ContextMenu extends PureComponent {
                     exportLink.setAttribute('href', `data:text/json;charset=utf-8,${encodeURIComponent(JSON.stringify(shapes))}`);
                     exportLink.click();
                 },
+                title: 'Export',
                 child:
                     <polygon
-                        points='0 0, 20 0, 20 20'
-                    />
+                        points='0 0, 20 20'
+                    />,
             },
             {
                 onClick: () => {
@@ -168,17 +181,19 @@ class ContextMenu extends PureComponent {
                     importInput.addEventListener('change', onFileSelected);
                     importInput.click();
                 },
+                title: 'Import',
                 child:
                     <polygon
-                        points='0 0, 20 0, 20 20'
-                    />
+                        points='0 0, 20 20'
+                    />,
             },
             {
                 onClick: () => window.confirm('Removes all shapes from this view.') && dispatch(drawingActions.clear()),
+                title: 'Clear All',
                 child:
                     <polygon
-                        points='-10 -10, 0 10, 10 10'
-                    />
+                        points='0 0, 20 20'
+                    />,
             },
         ].map((option, i, arr) => menuSlice({
             end: 360 / arr.length * (i + 1),

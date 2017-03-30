@@ -6,7 +6,9 @@
   "license": "MIT",
   "scripts": {
     "build": "webpack",
-    "start": "webpack-dev-server"
+    "watch": "webpack -w",
+    "start": "firebase serve",
+    "local": "webpack-dev-server"
   },
   "devDependencies": {
     "babel-core": "^6.24.0",
