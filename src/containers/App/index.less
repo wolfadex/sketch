@@ -1,13 +1,32 @@
+@color-active: rgb(83, 176, 205);
+
 .app {
     cursor: crosshair;
 }
 
 .shape {
     &:hover {
-        stroke: rgb(83, 176, 205);
+        stroke: @color-active;
     }
 }
 
 .shape--active {
-    stroke: rgb(83, 176, 205);
+    stroke: @color-active;
+}
+
+.edit-point {
+    fill: @color-active;
+    stroke: @color-active;
+}
+
+.edit-point__move {
+    &:hover {
+        cursor: move;
+    }
+}
+
+.edit-point__resize {
+    &:hover {
+        cursor: nwse-resize;
+    }
 }

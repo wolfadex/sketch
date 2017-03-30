@@ -1,7 +1,7 @@
 # Sketch
 A minimalist wireframing tool
 
-Features
+### Features
   * [ ] Drawing
     * [ ] Shapes
       * [x] Boxes

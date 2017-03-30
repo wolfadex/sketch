@@ -7,6 +7,9 @@ import * as drawingActions from 'actions/drawing';
 import * as themeActions from 'actions/theme';
 import ContextMenu from 'components/ContextMenu';
 import Background from 'containers/Background';
+import EditPoints from 'components/EditPoints';
+import { drawShape, getShapeMove, getShapeResize } from 'root/shapes';
+import { Vector2 } from 'root/vector2';
 
 @connect(({
     contextMenu: {
@@ -49,18 +52,18 @@ class App extends Component {
 
         window.addEventListener('resize', this.handleWindowResize.bind(this));
         window.addEventListener('contextmenu', this.showContextMenu.bind(this));
-        window.addEventListener('mousedown', this.startShape.bind(this));
-        window.addEventListener('mousemove', this.updateShape.bind(this));
-        window.addEventListener('mouseup', this.endShape.bind(this));
+        window.addEventListener('mousedown', this.handleMouseDown.bind(this));
+        window.addEventListener('mousemove', this.handleMouseMove.bind(this));
+        window.addEventListener('mouseup', this.handleMouseUp.bind(this));
         window.addEventListener('keydown', this.handleKeyDown.bind(this));
     }
 
     componentWillUnmount() {
         window.removeEventListener('resize', this.handleWindowResize);
         window.removeEventListener('contextmenu', this.showContextMenu);
-        window.removeEventListener('mousedown', this.startShape);
-        window.removeEventListener('mousemove', this.updateShape);
-        window.removeEventListener('mouseup', this.endShape);
+        window.removeEventListener('mousedown', this.handleMouseDown);
+        window.removeEventListener('mousemove', this.handleMouseMove);
+        window.removeEventListener('mouseup', this.handleMouseUp);
         window.removeEventListener('keydown', this.handleKeyDown);
     }
 
@@ -105,21 +108,23 @@ class App extends Component {
                 />
                 {/* Shapes */}
                 <g>
-                    {Object.keys(shapes).map((key) => {
-                        const {
-                            type,
-                            ...shapeProps
-                        } = shapes[key];
-
-                        return type == null ? null : createElement(type, Object.assign({}, shapeProps, {
+                    {Object.keys(shapes).map((key) =>
+                        drawShape(Object.assign({}, shapes[key], {
                             className: `shape ${key === currentShape ? 'shape--active' : ''}`,
                             fill: 'none',
                             id: key,
                             key,
                             stroke: styles[colors].stroke,
                             strokeWidth: '3px',
-                        }));
-                    })}
+                        }))
+                    )}
+                    {
+                        currentShape &&
+                        <EditPoints
+                            movePoint={getShapeMove(shapes[currentShape])}
+                            resizePoint={getShapeResize(shapes[currentShape])}
+                        />
+                    }
                 </g>
                 {
                     showContextMenu &&
@@ -151,7 +156,7 @@ class App extends Component {
         dispatch(contextMenuActions.show(true));
     }
 
-    startShape({
+    handleMouseDown({
         button,
         target: {
             classList,
@@ -164,20 +169,31 @@ class App extends Component {
         const {
             currentShape,
             dispatch,
+            shapes,
             showContextMenu,
         } = this.props;
 
-        if (button === 0 && !showContextMenu) {
-            if (parentElement.id === 'background') {
-                dispatch(drawingActions.startShape(x, y));
-            }
-            else if (classList.value.indexOf('shape') > -1) {
-                dispatch(drawingActions.selectShape(id));
+        if (button === 0) {
+            if (!showContextMenu) {
+                if (parentElement.id === 'background') {
+                    dispatch(drawingActions.startShape(Vector2(x, y)));
+                }
+                else if (classList.value.indexOf('shape') > -1) {
+                    dispatch(drawingActions.selectShape(id));
+                }
+                else if (classList.value.indexOf('edit-point') > -1) {
+                    if (classList.value.indexOf('edit-point__move') > -1) {
+                        dispatch(drawingActions.startMove(Vector2(x, y)));
+                    }
+                    else if (classList.value.indexOf('edit-point__resize') > -1) {
+                        dispatch(drawingActions.startResize(Vector2(x, y)));
+                    }
+                }
             }
         }
     }
 
-    endShape({
+    handleMouseUp({
         button,
     }) {
         const {
@@ -186,83 +202,39 @@ class App extends Component {
             drawingMode,
         } = this.props;
 
-        if (button === 0 && drawingMode === 'create' && currentShape) {
-            dispatch(drawingActions.endShape());
-        }
-    }
-
-    updateShape({
-        x,
-        y,
-    }) {
-        const {
-            initialX,
-            initialY,
-            currentShape,
-            dispatch,
-            drawingMode,
-            shapes: {
-                [currentShape]: shapeProps,
-            } = {},
-        } = this.props;
-
-        if (currentShape && drawingMode) {
+        if (button === 0 && currentShape) {
             switch (drawingMode) {
                 case 'create':
-                    dispatch(drawingActions.updateShape(this.getShapeUpdateValues(shapeProps, x, y, initialX, initialY)));
+                    dispatch(drawingActions.endShape());
                     break;
-                case 'update':
+                case 'move':
+                case 'resize':
+                    dispatch(drawingActions.endUpdate());
                     break;
             }
         }
     }
 
-    getShapeUpdateValues(
-        {
-            type,
-            ...shapeProps
-        },
+    handleMouseMove({
         x,
         y,
-        initialX,
-        initialY,
-    ) {
-        const diffX = x - initialX;
-        const diffY = y - initialY;
+    }) {
+        const {
+            currentShape,
+            dispatch,
+            drawingMode,
+        } = this.props;
 
-        switch (type) {
-            case 'rect':
-                return Object.assign(
-                    {},
-                    shapeProps,
-                    {
-                        width: Math.abs(diffX),
-                        height: Math.abs(diffY),
-                    },
-                    (diffX < 0 && {
-                        x: initialX + diffX,
-                    }),
-                    (diffY < 0 && {
-                        y: initialY + diffY,
-                    }),
-                );
-            case 'circle':
-                return Object.assign(
-                    {},
-                    shapeProps,
-                    {
-                        r: Math.sqrt(Math.abs(diffX) ** 2 + Math.abs(diffY) ** 2),
-                    },
-                );
-            case 'line':
-                return Object.assign(
-                    {},
-                    shapeProps,
-                    {
-                        x2: x,
-                        y2: y,
-                    },
-                );
+        if (currentShape && drawingMode) {
+            switch (drawingMode) {
+                case 'move':
+                    dispatch(drawingActions.moveShape(Vector2(x, y)));
+                    break;
+                case 'create':
+                case 'resize':
+                    dispatch(drawingActions.resizeShape(Vector2(x, y)));
+                    break;
+            }
         }
     }
 

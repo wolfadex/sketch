@@ -5,30 +5,47 @@ export const setShapeType = (newType) => ({
     newType,
 });
 
-export const startShape = (x, y) => ({
+export const startShape = (point) => ({
     type: types.START_SHAPE,
-    x,
-    y,
+    point,
 });
 
-export const updateShape = (shapeProps) => ({
-    type: types.UPDATE_SHAPE,
-    shapeProps,
+export const startResize = (point) => ({
+    type: types.START_RESIZE,
+    point,
+});
+
+export const startMove = (point) => ({
+    type: types.START_MOVE,
+    point,
+});
+
+export const moveShape = (point) => ({
+    type: types.MOVE_SHAPE,
+    point,
+});
+
+export const resizeShape = (point) => ({
+    type: types.RESIZE_SHAPE,
+    point,
 });
 
 export const endShape = () => ({
     type: types.END_SHAPE,
 });
 
+export const endUpdate = () => ({
+    type: types.END_UPDATE,
+});
+
 export const cancelShape = () => ({
     type: types.CANCEL_SHAPE,
 });
 
-export const selectShape = (shapeId, x, y) => ({
+export const selectShape = (shapeId, point) => ({
     type: types.SELECT_SHAPE,
     shapeId,
-    x,
-    y,
+    point,
 });
 
 export const deleteShape = () => ({

@@ -1,88 +1,23 @@
 import * as types from 'root/ActionTypes';
 import { guid } from 'root/helpers';
-
+import { Vector2, add, subtract } from 'root/vector2';
 
 const initialState = {
-    initialX: 0,
-    initialY: 0,
-    mode: null,
     currentShape: null,
     currentType: 'rect',
+    initialPoint: Vector2(),
+    mode: null,
     shapes: {},
-};
-const defaultShapeProps = {
-    rect: (x, y) => ({
-        x,
-        y,
-        width: 20,
-        height: 20,
-    }),
-    circle: (cx, cy) => ({
-        cx,
-        cy,
-        r: 10,
-    }),
-    line: (x1, y1) => ({
-        x1,
-        y1,
-        x2: x1,
-        y2: y1 + 20,
-    })
-};
-const shapePropsFromType = (type, shapeProps = {}) => {
-    switch (type) {
-        case 'rect':
-            const {
-                height,
-                width,
-                x,
-                y,
-            } = shapeProps;
-
-            return {
-                height,
-                width,
-                x,
-                y,
-            };
-        case 'circle':
-            const {
-                cx,
-                cy,
-                r,
-            } = shapeProps;
-
-            return {
-                cx,
-                cy,
-                r,
-            };
-        case 'line':
-            const {
-                x1,
-                y1,
-                x2,
-                y2,
-            } = shapeProps;
-
-            return {
-                x1,
-                y1,
-                x2,
-                y2,
-            };
-    }
 };
 
 export default function contextMenuReducer(
     state = initialState,
     {
         newType,
+        point,
         shapeId,
         shapeProps,
         type,
-        x,
-        y,
     },
 ) {
     switch(type) {
@@ -90,34 +25,52 @@ export default function contextMenuReducer(
             let newShape = guid();
 
             return Object.assign({}, state, {
-                initialX: x,
-                initialY: y,
+                initialPoint: point,
                 mode: 'create',
                 currentShape: newShape,
                 shapes: Object.assign({}, state.shapes, {
-                    [newShape]: Object.assign(
-                        {},
-                        shapePropsFromType(state.currentType, defaultShapeProps[state.currentType](x, y)),
-                        {
-                            type: state.currentType,
-                        },
-                    ),
+                    [newShape]: Object.assign({}, {
+                        p1: point,
+                        p2: add(point, Vector2(20, 20)),
+                        type: state.currentType,
+                    }),
                 }),
             });
-        case types.UPDATE_SHAPE:
+        case types.START_RESIZE:
+            return Object.assign({}, state, {
+                initialPoint: point,
+                mode: 'resize',
+            });
+        case types.START_MOVE:
+            return Object.assign({}, state, {
+                initialPoint: point,
+                mode: 'move',
+            });
+        case types.MOVE_SHAPE:
             return Object.assign({}, state, {
                 shapes: Object.assign({}, state.shapes, {
-                    [state.currentShape]: Object.assign(
-                        {},
-                        state.shapes[state.currentShape],
-                        shapePropsFromType(state.currentType, shapeProps),
-                    ),
+                    [state.currentShape]: Object.assign({}, state.shapes[state.currentShape], {
+                        p1: point,
+                        p2: subtract(state.shapes[state.currentShape].p2, subtract(state.shapes[state.currentShape].p1, point)),
+                    }),
+                }),
+            });
+        case types.RESIZE_SHAPE:
+            return Object.assign({}, state, {
+                shapes: Object.assign({}, state.shapes, {
+                    [state.currentShape]: Object.assign({}, state.shapes[state.currentShape], {
+                        p2: point,
+                    }),
                 }),
             });
         case types.END_SHAPE:
             return Object.assign({}, state, {
                 mode: null,
                 currentShape: null,
+            });
+        case types.END_UPDATE:
+            return Object.assign({}, state, {
+                mode: null,
             });
         case types.CANCEL_SHAPE:
             const {
@@ -145,9 +98,6 @@ export default function contextMenuReducer(
             });
         case types.SELECT_SHAPE:
             return Object.assign({}, state, {
-                initialX: x,
-                initialY: y,
-                mode: 'update',
                 currentShape: shapeId,
             });
         default:
