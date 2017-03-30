@@ -10,13 +10,14 @@ A minimalist wireframing tool
       * [ ] Text
       * [ ] Icons (A list of predefined shapes)
     * [x] Select
-    * [ ] Resize
+    * [x] Resize
+    * [x] Move
     * [x] Delete
     * [ ] Group shapes
   * [ ] Menu
     * [x] Set current shape type
     * [x] Change theme (light/dark)
-    * [ ] Clear view of all shapes
+    * [x] Clear view of all shapes
   * [ ] Zoom
   * [ ] Scroll/Pan
   * [ ] Export

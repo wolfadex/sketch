@@ -18,3 +18,4 @@ export const SELECT_SHAPE = 'SELECT_SHAPE';
 export const DELETE_SHAPE = 'DELETE_SHAPE';
 export const MOVE_SHAPE = 'MOVE_SHAPE';
 export const RESIZE_SHAPE = 'RESIZE_SHAPE';
+export const CLEAR_ALL_SHAPES = 'CLEAR_ALL_SHAPES';

@@ -3,6 +3,7 @@ import React, { PureComponent } from 'react';
 import { styles } from 'root/theme';
 import { connect } from 'react-redux';
 import enhanceWithClickOutside from 'react-click-outside';
+import { toastr } from 'react-redux-toastr'
 import * as contextMenuActions from 'actions/contextMenu';
 import * as drawingActions from 'actions/drawing';
 import * as themeActions from 'actions/theme';
@@ -115,6 +116,24 @@ class ContextMenu extends PureComponent {
             //     // child:
             //     //     'icon',
             // },
+            {
+                onClick: () => toastr.confirm('Clearing removes all shapes from this view.', {
+                    onOk: () => dispatch(drawingActions.clear()),
+                    okText: 'Clear',
+                }),
+                child:
+                    <polygon
+                        points='-10 -10, 0 10, 10 10'
+                    />
+                    // <ine
+                    //     x1='0'
+                    //     y1='20'
+                    //     x2='20'
+                    //     y2='0'
+                    //     stroke='black'
+                    //     strokeWidth='3px'
+                    // />,
+            },
         ].map((option, i, arr) => menuSlice({
             end: 360 / arr.length * (i + 1),
             key: `context-menu__option__${i}`,

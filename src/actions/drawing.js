@@ -51,3 +51,7 @@ export const selectShape = (shapeId, point) => ({
 export const deleteShape = () => ({
     type: types.DELETE_SHAPE,
 });
+
+export const clear = () => ({
+    type: types.CLEAR_ALL_SHAPES,
+});

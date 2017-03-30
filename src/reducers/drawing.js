@@ -100,6 +100,12 @@ export default function contextMenuReducer(
             return Object.assign({}, state, {
                 currentShape: shapeId,
             });
+        case types.CLEAR_ALL_SHAPES:
+            return Object.assign({}, state, {
+                currentShape: null,
+                mode: null,
+                shapes: {},
+            });
         default:
             return state;
     }
