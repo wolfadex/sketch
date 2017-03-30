@@ -49,11 +49,15 @@ const menuSlice = ({
             y,
         } = {},
     },
+    drawing: {
+        shapes,
+    },
     theme: {
         colors,
     },
 }) => ({
     colors,
+    shapes,
     x,
     y,
 }))
@@ -70,6 +74,7 @@ class ContextMenu extends PureComponent {
         const {
             colors,
             dispatch,
+            shapes,
             x,
             y,
         } = this.props;
@@ -129,19 +134,51 @@ class ContextMenu extends PureComponent {
             //     //     'icon',
             // },
             {
+                onClick: () => {
+                    const exportLink = document.getElementById('export-link');
+
+                    exportLink.setAttribute('href', `data:text/json;charset=utf-8,${encodeURIComponent(JSON.stringify(shapes))}`);
+                    exportLink.click();
+                },
+                child:
+                    <polygon
+                        points='0 0, 20 0, 20 20'
+                    />
+            },
+            {
+                onClick: () => {
+                    const importInput = document.getElementById('import-input');
+                    const onFileSelected = ({
+                        target: {
+                            files: [
+                                file,
+                            ] = [],
+                        } = {},
+                    } = {}) => {
+                        const reader  = new FileReader();
+
+                        reader.onload = (output) => {
+                            dispatch(drawingActions.importShapes(JSON.parse(output.target.result)));
+                        };
+                        reader.readAsText(file);
+                        importInput.removeEventListener('change', onFileSelected);
+                        importInput.value = null;
+                    };
+
+                    importInput.addEventListener('change', onFileSelected);
+                    importInput.click();
+                },
+                child:
+                    <polygon
+                        points='0 0, 20 0, 20 20'
+                    />
+            },
+            {
                 onClick: () => window.confirm('Removes all shapes from this view.') && dispatch(drawingActions.clear()),
                 child:
                     <polygon
                         points='-10 -10, 0 10, 10 10'
                     />
-                    // <ine
-                    //     x1='0'
-                    //     y1='20'
-                    //     x2='20'
-                    //     y2='0'
-                    //     stroke='black'
-                    //     strokeWidth='3px'
-                    // />,
             },
         ].map((option, i, arr) => menuSlice({
             end: 360 / arr.length * (i + 1),

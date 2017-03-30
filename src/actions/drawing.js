@@ -60,3 +60,8 @@ export const setText = (content) => ({
     type: types.SET_TEXT,
     content,
 });
+
+export const importShapes = (shapes) => ({
+    type: types.IMPORT,
+    shapes,
+});

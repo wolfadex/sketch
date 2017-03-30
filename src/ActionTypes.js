@@ -20,3 +20,4 @@ export const MOVE_SHAPE = 'MOVE_SHAPE';
 export const RESIZE_SHAPE = 'RESIZE_SHAPE';
 export const CLEAR_ALL_SHAPES = 'CLEAR_ALL_SHAPES';
 export const SET_TEXT = 'SET_TEXT';
+export const IMPORT = 'IMPORT';

@@ -13,11 +13,12 @@ const initialState = {
 export default function contextMenuReducer(
     state = initialState,
     {
+        content,
         newType,
         point,
         shapeId,
         shapeProps,
-        content,
+        shapes,
         type,
     },
 ) {
@@ -36,6 +37,10 @@ export default function contextMenuReducer(
                         type: state.currentType,
                     }),
                 }),
+            });
+        case types.IMPORT:
+            return Object.assign({}, state, {
+                shapes,
             });
         case types.START_RESIZE:
             return Object.assign({}, state, {
