@@ -20,10 +20,10 @@ A minimalist wireframing tool
     * [x] Clear view of all shapes
   * [ ] Zoom
   * [ ] Scroll/Pan
-  * [ ] Export
-    * [ ] JSON
-  * [ ] Import
-    * [ ] JSON
+  * [x] Export
+    * [x] JSON
+  * [x] Import
+    * [x] JSON
   * [ ] Views (different states of the wireframe)
   * [ ] Interactive mode (clickable "links" to switch between views, no drawing)
 
