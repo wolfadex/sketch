@@ -56,6 +56,7 @@ class App extends Component {
         window.addEventListener('mousemove', this.handleMouseMove.bind(this));
         window.addEventListener('mouseup', this.handleMouseUp.bind(this));
         window.addEventListener('keydown', this.handleKeyDown.bind(this));
+        window.addEventListener('dblclick', this.handleDoubleClick.bind(this));
     }
 
     componentWillUnmount() {
@@ -65,6 +66,7 @@ class App extends Component {
         window.removeEventListener('mousemove', this.handleMouseMove);
         window.removeEventListener('mouseup', this.handleMouseUp);
         window.removeEventListener('keydown', this.handleKeyDown);
+        window.removeEventListener('dblclick', this.handleDoubleClick);
     }
 
     render() {
@@ -176,7 +178,12 @@ class App extends Component {
         if (button === 0) {
             if (!showContextMenu) {
                 if (parentElement.id === 'background') {
-                    dispatch(drawingActions.startShape(Vector2(x, y)));
+                    if (currentShape) {
+                        dispatch(drawingActions.selectShape());
+                    }
+                    else {
+                        dispatch(drawingActions.startShape(Vector2(x, y)));
+                    }
                 }
                 else if (classList.value.indexOf('shape') > -1) {
                     dispatch(drawingActions.selectShape(id));
@@ -193,6 +200,27 @@ class App extends Component {
         }
     }
 
+    handleDoubleClick({
+        button,
+    }) {
+        const {
+            currentShape,
+            dispatch,
+            shapes: {
+                [currentShape]: {
+                    type,
+                    content,
+                } = {},
+            } = {},
+        } = this.props;
+
+        if (button === 0) {
+            if (type === 'text') {
+                dispatch(drawingActions.setText(window.prompt('Text content', content)));
+            }
+        }
+    }
+
     handleMouseUp({
         button,
     }) {
@@ -200,12 +228,18 @@ class App extends Component {
             currentShape,
             dispatch,
             drawingMode,
+            shapes,
         } = this.props;
 
         if (button === 0 && currentShape) {
             switch (drawingMode) {
                 case 'create':
+                    if (shapes[currentShape].type === 'text') {
+                        dispatch(drawingActions.setText(window.prompt('Text content', 'Text')));
+                    }
+
                     dispatch(drawingActions.endShape());
+
                     break;
                 case 'move':
                 case 'resize':

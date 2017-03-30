@@ -111,16 +111,25 @@ class ContextMenu extends PureComponent {
                         strokeWidth='3px'
                     />,
             },
+            {
+                onClick: () => this.handleSetShape('text'),
+                child:
+                    <text
+                        x='-10'
+                        y='0'
+                        fontFamily='serif'
+                        fontSize='30'
+                    >
+                        T
+                    </text>,
+            },
             // {
             //     onClick: () => his.handleSetShape('path'),
             //     // child:
             //     //     'icon',
             // },
             {
-                onClick: () => toastr.confirm('Clearing removes all shapes from this view.', {
-                    onOk: () => dispatch(drawingActions.clear()),
-                    okText: 'Clear',
-                }),
+                onClick: () => window.confirm('Removes all shapes from this view.') && dispatch(drawingActions.clear()),
                 child:
                     <polygon
                         points='-10 -10, 0 10, 10 10'

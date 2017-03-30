@@ -55,3 +55,8 @@ export const deleteShape = () => ({
 export const clear = () => ({
     type: types.CLEAR_ALL_SHAPES,
 });
+
+export const setText = (content) => ({
+    type: types.SET_TEXT,
+    content,
+});

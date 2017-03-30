@@ -17,6 +17,7 @@ export default function contextMenuReducer(
         point,
         shapeId,
         shapeProps,
+        content,
         type,
     },
 ) {
@@ -60,6 +61,14 @@ export default function contextMenuReducer(
                 shapes: Object.assign({}, state.shapes, {
                     [state.currentShape]: Object.assign({}, state.shapes[state.currentShape], {
                         p2: point,
+                    }),
+                }),
+            });
+        case types.SET_TEXT:
+            return Object.assign({}, state, {
+                shapes: Object.assign({}, state.shapes, {
+                    [state.currentShape]: Object.assign({}, state.shapes[state.currentShape], {
+                        content,
                     }),
                 }),
             });

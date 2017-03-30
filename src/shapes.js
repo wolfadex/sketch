@@ -64,6 +64,36 @@ const drawableShapes = {
             {...props}
         />
     ),
+    text: (
+        {
+            x: x1,
+            y: y1,
+        },
+        {
+            x: x2,
+        },
+        {
+            content = 'Text',
+            stroke,
+            fill,
+            ...props
+        },
+    ) => (
+        <text
+            x={x1}
+            y={y1}
+            fontFamily='sans-serif'
+            fontSize={Math.max(0, x2 - x1)}
+            {...props}
+            stroke={fill}
+            fill={stroke}
+            style={{
+                userSelect: 'none',
+            }}
+        >
+            {content}
+        </text>
+    ),
 };
 
 export const drawShape = ({
@@ -84,25 +114,30 @@ export const getShapeMove = ({
         case 'rect':
         case 'circle':
         case 'line':
+        default:
             return Vector2(x, y);
     }
 };
 
 export const getShapeResize = ({
     type,
-    p2: {
-        x,
-        y,
-    } = {},
     p1: {
+        x: x1,
         y: y1,
+    } = {},
+    p2: {
+        x: x2,
+        y: y2,
     } = {},
 }) => {
     switch (type) {
         case 'circle':
-            return Vector2(x, y1);
+            return Vector2(x2, y1);
+        case 'text':
+            return Vector2(Math.max(x1 + 3, x2), y1);
         case 'rect':
         case 'line':
-            return Vector2(x, y);
+        default:
+            return Vector2(x2, y2);
     }
 };

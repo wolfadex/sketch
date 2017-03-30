@@ -7,7 +7,7 @@ A minimalist wireframing tool
       * [x] Boxes
       * [x] Circles
       * [x] Lines
-      * [ ] Text
+      * [x] Text
       * [ ] Icons (A list of predefined shapes)
     * [x] Select
     * [x] Resize
